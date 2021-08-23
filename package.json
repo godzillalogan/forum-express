@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "mocha tests --exit --recursive --timeout 5000"
+    "test": "set \"NODE_ENV=test\" && mocha tests --exit --recursive --timeout 5000"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   "dependencies": {
     "chai": "^4.2.0",
     "express": "^4.17.1",
+    "express-handlebars": "^5.3.3",
     "mocha": "^8.2.0",
     "mysql2": "^2.2.5",
     "sequelize": "^6.3.5",
