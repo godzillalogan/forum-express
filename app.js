@@ -22,6 +22,7 @@ app.use(passport.session())  //啟動 session 功能，這組設定務必要放�
 app.use((req, res, next) => {
   res.locals.success_messages = req.flash('success_messages')
   res.locals.error_messages = req.flash('error_messages')
+  res.locals.user = req.user
   next()
 })
 
