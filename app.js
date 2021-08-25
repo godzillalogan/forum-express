@@ -3,6 +3,9 @@ const handlebars = require('express-handlebars')
 const bodyParser = require('body-parser')
 const flash = require('connect-flash')
 const session = require('express-session')
+
+const passport = require('./config/passport')
+
 const app = express()
 const port = 3000
 
@@ -12,6 +15,8 @@ app.engine('handlebars', handlebars({ defaultLayout: 'main' }))
 app.set('view engine','handlebars')
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
 app.use(flash())
+app.use(passport.initialize()) //初始化 Passport
+app.use(passport.session())  //啟動 session 功能，這組設定務必要放在 session() 之後
 
 // 把 req.flash 放到 res.locals 裡面
 app.use((req, res, next) => {
@@ -24,6 +29,6 @@ app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
-require('./routes')(app)
+require('./routes')(app, passport)
 
 module.exports = app
