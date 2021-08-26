@@ -37,4 +37,6 @@ module.exports = (app, passport) => {
   //create
   app.get('/admin/restaurants/create', authenticatedAdmin, adminController.createRestaurant)
   app.post('/admin/restaurants', authenticatedAdmin, adminController.postRestaurant)
+  //Read
+  app.get('/admin/restaurants/:id', authenticatedAdmin, adminController.getRestaurant)
 }
