@@ -19,6 +19,7 @@ app.use(flash())
 app.use(passport.initialize()) //初始化 Passport
 app.use(passport.session())  //啟動 session 功能，這組設定務必要放在 session() 之後
 app.use(methodOverride('_method'))
+app.use('/upload', express.static(__dirname + '/upload'))
 
 // 把 req.flash 放到 res.locals 裡面
 app.use((req, res, next) => {
