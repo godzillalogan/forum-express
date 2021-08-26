@@ -3,6 +3,7 @@ const handlebars = require('express-handlebars')
 const bodyParser = require('body-parser')
 const flash = require('connect-flash')
 const session = require('express-session')
+const methodOverride = require('method-override')
 
 const passport = require('./config/passport')
 
@@ -17,6 +18,7 @@ app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
 app.use(flash())
 app.use(passport.initialize()) //初始化 Passport
 app.use(passport.session())  //啟動 session 功能，這組設定務必要放在 session() 之後
+app.use(methodOverride('_method'))
 
 // 把 req.flash 放到 res.locals 裡面
 app.use((req, res, next) => {
