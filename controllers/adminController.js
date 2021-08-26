@@ -45,7 +45,7 @@ const adminController = {
   },
   //Update
   putRestaurant: (req, res) => {
-    if(!req.body.name){
+    if(!req.body.name){    // name 欄位的必填驗證
       req.flash('error_messages', "name didn't exist")
       return res.redirect('back')
     }
@@ -65,6 +65,16 @@ const adminController = {
         })
       })
   },
+  //Delete
+  deleteRestaurant: (req, res) => {
+    return Restaurant.findByPk(req.params.id)
+      .then((restaurant) => {
+        restaurant.destroy()
+          .then((restaurant) => {
+            res.redirect('/admin/restaurants')
+          })
+      })
+  }
 }
 
 module.exports = adminController
