@@ -6,6 +6,7 @@ const session = require('express-session')
 const methodOverride = require('method-override')
 
 const passport = require('./config/passport')  //記得要加在 Passport 之前
+const helpers = require('./_helpers');
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -16,7 +17,10 @@ if(process.env.NODE_ENV !== 'production'){
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.engine('handlebars', handlebars({ defaultLayout: 'main' }))
+app.engine('handlebars', handlebars({ 
+  defaultLayout: 'main',
+  helpers: require('./handlebarHelpers/handlebarsHelpers')  //handlebars helper之後可能會用到
+}))
 app.set('view engine','handlebars')
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
 app.use(flash())
@@ -29,7 +33,7 @@ app.use('/upload', express.static(__dirname + '/upload'))
 app.use((req, res, next) => {
   res.locals.success_messages = req.flash('success_messages')
   res.locals.error_messages = req.flash('error_messages')
-  res.locals.user = req.user
+  res.locals.user = helpers.getUser(req)  //取代req.user
   next()
 })
 
