@@ -5,7 +5,7 @@ const flash = require('connect-flash')
 const session = require('express-session')
 const methodOverride = require('method-override')
 
-const passport = require('./config/passport')  
+const passport = require('./config/passport')  //記得要加在 Passport 之前
 const helpers = require('./_helpers');
 
 const app = express()
@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.engine('handlebars', handlebars({ 
   defaultLayout: 'main',
-  helpers: require('./handlebarHelpers/admin')  
+  helpers: require('./handlebarHelpers/handlebarsHelpers')  //handlebars helper之後可能會用到
 }))
 app.set('view engine','handlebars')
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
@@ -29,7 +29,7 @@ app.use(passport.session())  //啟動 session 功能，這組設定務必要放�
 app.use(methodOverride('_method'))
 app.use('/upload', express.static(__dirname + '/upload'))
 
-
+// 把 req.flash 放到 res.locals 裡面
 app.use((req, res, next) => {
   res.locals.success_messages = req.flash('success_messages')
   res.locals.error_messages = req.flash('error_messages')
