@@ -130,6 +130,7 @@ const adminController = {
     return User.findByPk(id)
       .then(user =>{
         user.isAdmin = user.isAdmin? false:true
+        req.flash('success_messages', `${user.name} 成功變更為 ${user.isAdmin?'admin':'user'}`)
         return user.save()
       })
       .then(()=>{

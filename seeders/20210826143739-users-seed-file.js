@@ -25,7 +25,6 @@ module.exports = {
       updatedAt: new Date()
     }], {})
   },
-  //bulkDelete，也就是批次刪除，這會把 Users 這個 Table 裡面的資料全部都清空，並且寫入 null 值，第三個參數可以指定 where 條件，但這裡因為全部刪除，所以只傳入空物件。
   down: async (queryInterface, Sequelize) => {
     await queryInterface.bulkDelete('Users', null, {})
   }
