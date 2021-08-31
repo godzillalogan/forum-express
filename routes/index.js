@@ -3,6 +3,7 @@ const helpers = require('../_helpers');
 const restController = require('../controllers/restController.js')
 const adminController = require('../controllers/adminController.js')
 const userController = require('../controllers/userController.js')
+const categoryController = require('../controllers/categoryController.js')
 
 const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
@@ -51,4 +52,6 @@ module.exports = (app, passport) => {
   //users
   app.get('/admin/users', authenticatedAdmin, adminController.getUsers)
   app.put('/admin/users/:id/toggleAdmin', authenticatedAdmin, adminController.toggleAdmin)
+  //categories
+  app.get('/admin/categories', authenticatedAdmin, categoryController.getCategories)
 }
