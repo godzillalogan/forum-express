@@ -18,7 +18,8 @@ if(process.env.NODE_ENV !== 'production'){
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.engine('handlebars', handlebars({ 
-  defaultLayout: 'main' 
+  defaultLayout: 'main',
+  helpers: require('./config/handlebars-helpers')
 }))
 app.set('view engine','handlebars')
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
