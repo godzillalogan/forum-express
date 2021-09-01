@@ -15,6 +15,15 @@ const restController = {
         restaurants: data
       })
     })
-  }
+  },
+  getRestaurant: (req, res) => {
+    return Restaurant.findByPk(req.params.id, {
+        include:  Category
+      }).then(restaurant => {
+        return res.render('restaurant', {
+          restaurant: restaurant.toJSON() //和 findByPk 搭配時可以用 toJSON()
+        })
+      })
+   }
 }
 module.exports = restController
