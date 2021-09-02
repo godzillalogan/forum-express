@@ -66,4 +66,6 @@ module.exports = (app, passport) => {
   app.delete('/admin/categories/:id', authenticatedAdmin, categoryController.deleteCategory)
   //comments,create
   app.post('/comments', authenticated, commentController.postComment)
+  //comments,delete
+  app.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment)
 }
