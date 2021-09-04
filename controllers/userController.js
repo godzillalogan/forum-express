@@ -1,6 +1,10 @@
 const bcrypt = require('bcryptjs')
 const db = require('../models')
 const User = db.User
+const fs = require('fs')
+const imgur = require('imgur-node-api')
+const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
+const helpers = require('../_helpers');
 
 const userController = {
   signUpPage: (req, res) => {
@@ -8,7 +12,6 @@ const userController = {
   },
 
   signUp: (req, res) => {
-    // confirm password
     if(req.body.passwordCheck !== req.body.password){
       req.flash('error_messages', '兩次密碼輸入不同！')
       return res.redirect('/signup')
@@ -49,11 +52,62 @@ const userController = {
     const  id = req.params.id
     return User.findByPk(id)
       .then(user =>{
-        return res.render('user',{ user:user.dataValues })
+        return res.render('user',{ user:user.toJSON() })
       })
   },
-  editUser: (req,res) =>{
-    return res.render('userEdit')
+  editUser:(req ,res) =>{
+    const currentUser = helpers.getUser(req).id
+    if(currentUser !== Number(req.params.id)){
+      console.log('currentUser:',currentUser,'req.params.id:',req.params.id)
+      req.flash('error_messages', 'you can\'s edit other user\'s information')
+      return res.redirect(`/users/${currentUser}`)
+    }
+    return User.findByPk(req.params.id)
+      .then(user =>{
+        return res.render('userEdit',{ user:user.dataValues })
+      })
+  },
+  putUser: (req,res) =>{
+    if (!req.body.name) {
+      req.flash('error_messages', "name didn't exist")
+      return res.redirect('back')
+    }
+    const { file } = req //file = req.file
+    if(file){
+      imgur.setClientID(IMGUR_CLIENT_ID);
+      imgur.upload(file.path, (err, img) => {
+        if (err) console.log(`Error: ${err}`)
+        return User.findByPk(id)
+          .then(user =>{
+            user.update({
+              name:req.body.name,
+              image: file ? img.data.link : user.image
+            })
+          }).then(user =>{
+            req.flash('success_messages', 'user was successfully to update')
+            res.redirect(`/users/${req.params.id}`)  //問題，導回去無法馬上顯示圖片，不知道是不是非同步的問題
+          })
+        // const user = await User.findByPk(id)
+        // user.update({
+        //   name:req.body.name,
+        //   image: file ? img.data.link : user.image
+        // })
+        // req.flash('success_messages', 'user was successfully to update')
+        // res.redirect(`/users/${id}`)  
+      })
+    } else {
+      return User.findByPk(req.params.id)
+        .then((user) =>{
+          user.update({
+            name:req.body.name,
+            image: user.image
+          }).then(user =>{
+            req.flash('success_messages', 'user was successfully to update')
+            res.redirect(`/users/${req.params.id}`)
+          })
+          .catch(err => console.error(err))
+        }) 
+    }
   }
 }
 

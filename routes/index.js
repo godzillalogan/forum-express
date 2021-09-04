@@ -37,7 +37,7 @@ module.exports = (app, passport) => {
   app.get('/admin/restaurants', authenticatedAdmin, adminController.getRestaurants)
   //註冊
   app.get('/signup', userController.signUpPage)
-  app.post('/signup', userController.signUp)
+  app.post('/signup', upload.single('image'), userController.signUp)
   //登入
   app.get('/signin', userController.signInPage)
   app.post('/signin', passport.authenticate('local', { failureRedirect: '/signin', failureFlash: true }), userController.signIn)
@@ -46,6 +46,7 @@ module.exports = (app, passport) => {
   app.get('/users/:id', authenticated, userController.getUser)
   //user edit
   app.get('/users/:id/edit', authenticated, userController.editUser)
+  app.put('/users/:id', authenticated, upload.single('image'), userController.putUser)
 
 
   //create
