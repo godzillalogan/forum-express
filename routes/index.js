@@ -28,6 +28,8 @@ module.exports = (app, passport) => {
   app.get('/', authenticated, (req, res) =>  res.redirect('restaurants')) 
   //在 /restaurants 底下則交給 restController.getRestaurants 來處理
   app.get('/restaurants', authenticated, restController.getRestaurants)
+  //Feeds
+  app.get('/restaurants/feeds', authenticated, restController.getFeeds)
   //前台個別餐廳
   app.get('/restaurants/:id', authenticated, restController.getRestaurant)
   // 連到 /admin 頁面就轉到 /admin/restaurants

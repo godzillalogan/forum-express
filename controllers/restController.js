@@ -63,6 +63,29 @@ const restController = {
           restaurant: restaurant.toJSON() //和 findByPk 搭配時可以用 toJSON()
         })
       })
-   }
+   },
+   getFeeds: (req, res) => {
+    return Promise.all([    //同時完成Restaurant.findAll和Comment.findAll，才進入then
+        Restaurant.findAll({
+          limit: 10,                 //十筆資料
+          raw: true,
+          nest: true,
+          order: [['createdAt', 'DESC']],  //最新的
+          include: [Category]
+        }),
+        Comment.findAll({
+          limit: 10,
+          raw: true,
+          nest: true,
+          order: [['createdAt', 'DESC']],
+          include: [User, Restaurant]
+        })
+      ]).then(([restaurants,comments]) => {
+        return res.render('feeds', {
+          restaurants: restaurants,
+          comments: comments
+        })
+      })
+  }
 }
 module.exports = restController
