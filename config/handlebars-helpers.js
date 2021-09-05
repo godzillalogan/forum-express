@@ -9,5 +9,8 @@ module.exports = {
   },
   moment: function (a) {
     return moment(a).fromNow()
+  },
+  noImage: function(a){
+    return a ? a: 'https://i.imgur.com/jV5OZrw.png'
   }
 }
