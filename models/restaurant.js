@@ -8,9 +8,14 @@ module.exports = (sequelize, DataTypes) => {
       Restaurant.belongsTo(models.Category) //關聯設定
       Restaurant.hasMany(models.Comment)
       Restaurant.belongsToMany(models.User, {  //多對多關係
-      through: models.Favorite,
-      foreignKey: 'RestaurantId',
-      as: 'FavoritedUsers'
+        through: models.Favorite,
+        foreignKey: 'RestaurantId',
+        as: 'FavoritedUsers'
+      })
+      Restaurant.belongsToMany(models.User, {
+        through: models.Like,
+        foreignKey: 'RestaurantId',
+        as: 'LikedUsers'
       })
     }
   };
