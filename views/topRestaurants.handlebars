@@ -1,0 +1,33 @@
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link" href="/restaurants">首頁</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/restaurants/feeds">最新動態</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" href="/restaurants/top">TOP 10 人氣餐廳</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/users/top">美食達人</a>
+  </li>
+</ul>
+{{#restaurants}}
+<div class="card shadow w-50 mx-auto mt-5">
+  <div class="card-body d-flex">
+    <img src="{{this.image}}" alt="">
+    <div class="ml-4">
+      <h4 class="card-title">{{this.name}}</h4>
+      <h3 class="badge bg-secondary text-white">收藏數: {{this.favoriteCounts}}</h3>
+      <p>{{this.description}}</p>
+      {{#if this.isFavorited }}
+      <form action="/favorite/{{this.id}}?_method=DELETE" method="POST" style="display: contents;"><button type="submit"
+          class="btn btn-danger">移除最愛</button></form>
+      {{else}}
+      <form action="/favorite/{{this.id}}" method="POST" style="display: contents;"><button type="submit"
+          class="btn btn-primary">加到最愛</button></form>
+      {{/if}}
+    </div>
+  </div>
+</div>
+{{/restaurants}}

@@ -2,7 +2,10 @@ const db = require('../models')
 const Restaurant = db.Restaurant
 const Category = db.Category
 const Comment = db.Comment
+const Favorite = db.Favorite
 const User = db.User
+const helpers = require('../_helpers');
+
 //分頁
 const pageLimit = 10
 
@@ -96,7 +99,7 @@ const restController = {
         })
       })
   },
-   getDashboard: (req, res) => {
+  getDashboard: (req, res) => {
     return Restaurant.findByPk(req.params.id, {
       include: [
         Category,
@@ -104,6 +107,22 @@ const restController = {
       ]
     }).then(restaurant => {
       return res.render('dashboard', { restaurant: restaurant.toJSON() })
+    })
+  },
+  getTopRestaurants:(req, res) => {
+    Restaurant.findAll({
+      include:
+      [ {model: User, as: 'FavoritedUsers'}],
+        limit: 10
+    }).then(restaurants =>{
+      restaurants = restaurants.map(r =>({
+        ...r.dataValues,
+        description: r.description.substring(0, 50), //substring 來截斷文字
+        favoriteCounts: r.FavoritedUsers.length, //計算有幾個收藏此餐廳的使用者
+        isFavorited : helpers.getUser(req).FavoritedRestaurants.map(d => d.id).includes(r.id)
+      }))
+      restaurants = restaurants.sort((a, b) => b.favoriteCounts - a.favoriteCounts)
+      return res.render('topRestaurants',{restaurants})
     })
   }
 }
