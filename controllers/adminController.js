@@ -8,19 +8,13 @@ const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
 const adminService = require('../services/adminServices.js')
 
+
 const adminController = {
   //瀏覽全部餐廳
   getRestaurants: (req, res) => {
     adminService.getRestaurants(req, res,(data) =>{
       return res.render('admin/restaurants', data)
     })
-    // return Restaurant.findAll({ 
-    //   raw: true,  //轉換成 JS 原生物件
-    //   nest: true, //轉換成 JS 原生物件
-    //   include: [Category] //include 取得關聯資料
-    // }).then(restaurants => {
-    //   return res.render('admin/restaurants', { restaurants: restaurants })
-    // })
   },
   //Create
   createRestaurant: (req, res) => {
@@ -72,13 +66,8 @@ const adminController = {
   },
   //Read,新增瀏覽餐廳頁面,名詞是單數
   getRestaurant: (req, res) => {
-    return Restaurant.findByPk(req.params.id, {
-        include: [Category]
-      })
-      .then(restaurant => {
-        return res.render('admin/restaurant', {
-          restaurant: restaurant.toJSON()
-      })
+    adminService.getRestaurant(req, res,(data) =>{
+      return res.render('admin/restaurant', data)
     })
   },
   //update,Restaurant.findByPk(req.params.id)透過網址列上的id找出餐廳資料，再把資料放到 restaurant 變數裡傳給view

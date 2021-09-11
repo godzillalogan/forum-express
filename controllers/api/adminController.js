@@ -10,13 +10,11 @@ const adminController = {
     adminService.getRestaurants(req,res ,(data)=>{
       return res.json(data)
     })
-    // return Restaurant.findAll({ 
-    //   raw: true,  //轉換成 JS 原生物件
-    //   nest: true, //轉換成 JS 原生物件
-    //   include: [Category] //include 取得關聯資料
-    // }).then(restaurants => {
-    //   return res.json({ restaurants: restaurants })
-    // })
+  },
+  getRestaurant: (req, res) => {
+    adminService.getRestaurant(req,res ,(data)=>{
+      return res.json(data)
+    })
   }
 }
 
