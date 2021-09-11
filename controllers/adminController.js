@@ -6,7 +6,7 @@ const fs = require('fs')
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
-const adminService = require('../services/adminServices.js')
+const adminService = require('../services/adminService.js')
 
 
 const adminController = {
@@ -131,13 +131,11 @@ const adminController = {
   },
   //Delete
   deleteRestaurant: (req, res) => {
-    return Restaurant.findByPk(req.params.id)
-      .then((restaurant) => {
-        restaurant.destroy()
-          .then((restaurant) => {
-            res.redirect('/admin/restaurants')
-          })
-      })
+    adminService.deleteRestaurant(req, res, (data) => {
+      if (data['status'] === 'success') {
+        return res.redirect('/admin/restaurants')
+      }
+    })
   },
   //Users
   getUsers:(req,res) =>{

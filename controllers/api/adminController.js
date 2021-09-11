@@ -2,7 +2,7 @@ const db = require('../../models')
 const Restaurant = db.Restaurant
 const Category = db.Category
 
-const adminService = require('../../services/adminServices.js')
+const adminService = require('../../services/adminService.js')
 
 const adminController = {
   //瀏覽全部餐廳
@@ -13,6 +13,11 @@ const adminController = {
   },
   getRestaurant: (req, res) => {
     adminService.getRestaurant(req,res ,(data)=>{
+      return res.json(data)
+    })
+  },
+  deleteRestaurant: (req, res) => {
+    adminService.deleteRestaurant(req, res, (data) => {
       return res.json(data)
     })
   }
