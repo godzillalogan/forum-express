@@ -31,7 +31,21 @@ let categoryService = {
         callback({categories: categories})
       }
     })
-  }
+  },
+  putCategory: (req, res, callback) => {
+    if (!req.body.name) {
+      req.flash('error_messages', 'name didn\'t exist')
+      return res.redirect('back')
+    } else {
+      return Category.findByPk(req.params.id)
+        .then((category) => {
+          category.update(req.body)
+            .then((category) => {
+              res.redirect('/admin/categories')
+            })
+        })
+    }
+  },
 }
 
 module.exports = categoryService
