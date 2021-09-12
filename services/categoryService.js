@@ -34,17 +34,25 @@ let categoryService = {
   },
   putCategory: (req, res, callback) => {
     if (!req.body.name) {
-      req.flash('error_messages', 'name didn\'t exist')
-      return res.redirect('back')
+      callback({status:'error', message:'name didn\'t exist'})
     } else {
       return Category.findByPk(req.params.id)
         .then((category) => {
           category.update(req.body)
             .then((category) => {
-              res.redirect('/admin/categories')
+              callback({status:'success', message:''})
             })
         })
     }
+  },
+  deleteCategory: (req, res, callback) => {
+    return Category.findByPk(req.params.id)
+      .then((category) => {
+        category.destroy()
+          .then((category) => {
+            callback({status:'success', message:''})
+          })
+      })
   },
 }
 
